@@ -1,27 +1,7 @@
-# ShopMeOnlineWebsite
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.6.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+![OnlineShopping Home page output](https://user-images.githubusercontent.com/79982684/121003122-c8132e00-c7aa-11eb-8128-3c0e4ffcc6bc.png)
+![mens page output](https://user-images.githubusercontent.com/79982684/121003152-d2cdc300-c7aa-11eb-879d-d980e400644c.png)
+![womens-page output](https://user-images.githubusercontent.com/79982684/121003204-e416cf80-c7aa-11eb-84c8-f9aaaccc75a0.png)
+![child-page output](https://user-images.githubusercontent.com/79982684/121003230-ec6f0a80-c7aa-11eb-8cce-10590e8b68f8.png)
+![Register-page output](https://user-images.githubusercontent.com/79982684/121003246-f2fd8200-c7aa-11eb-9b95-8e012c107f2b.png)
+![login-page output](https://user-images.githubusercontent.com/79982684/121003262-f7299f80-c7aa-11eb-8df3-55549c3e1b15.png)
