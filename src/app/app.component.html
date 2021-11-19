@@ -12,3 +12,263 @@
 </div>
 
 <app-footer></app-footer>
+
+// form ts file//
+
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+// import { ClrDaypicker } from '@clr/angular';
+import { DataAccessService } from '../data-access.service';
+declare let alertify: any;
+
+@Component({
+  selector: 'app-test-form',
+  templateUrl: './test-form.component.html',
+  styleUrls: ['./test-form.component.css']
+})
+export class TestFormComponent implements OnInit {
+
+  testListdata = [];
+  dept;
+  sections = [];
+  constructor(private service: DataAccessService,private router : Router) { }
+
+    
+  ngOnInit(): void {
+    this.getdepartment();
+  }
+
+  getdepartment(){
+    this.service.get('common.php?type=getDepartments').subscribe(response => {
+      this.dept = response;
+    });
+    
+  }
+
+  getSections(index) {
+    index = index - 1;
+    if (index !== -1) {
+      let temp = this.dept[index];
+      this.sections = temp['sections'];
+      console.log('subdata',this.sections);
+    }
+  }
+  
+  
+
+  addList(data): void{
+    this.testListdata[this.testListdata.length] = data.value;
+    
+  }
+
+
+  save(data) {
+    if (!data.valid) {
+      alertify.error('All fields are required');
+      return;
+    }
+    this.service.post('qc/test.php?type=saveTEST',JSON.stringify(data.value)).subscribe(response => {
+      if (response['status'] === 'success') {
+        data.reset();
+      
+        alertify.success('Record Inserted Successfully');
+      } else if (response['status'] === 'failed') {
+        alertify.error('Fa led To Occured Page,Try Again!');
+        data.reset();
+      }
+    });
+  }
+
+}
+
+
+function data(data: any) {
+  throw new Error('Function not implemented.');
+}
+
+function subscribe(arg0: (response: any) => void) {
+  throw new Error('Function not implemented.');
+}
+
+<div class="container">
+    <div class="card">
+        <!-- header started -->
+        <div class="card-header">
+            Material Details
+        </div>
+        <!-- block started -->
+        <div class="card-block">
+
+            <form #test="ngForm">
+                <div class="clr-row">
+
+                    <div class="clr-col-lg-4 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="Name">Material Name</label>
+                        <input type="text" id="Name" placeholder="Name">
+                    </div>
+
+                    <div class="clr-col-lg-4 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="Code">Material Code</label>
+                        <input type="text" id="Code" placeholder="Code">
+                    </div>
+                    <div class="clr-col-lg-4 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="qty">Quantity</label>
+                        <input type="text" id="qty" placeholder="qty">
+                    </div>
+                </div>
+                <div class="clr-row">
+                    <div class="clr-col-lg-3 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="Type">Material Type</label>
+                        <select class="form-control" id="Type">
+                            <option>--Select Option--</option>
+                            <option>Packing</option>
+                            <option>Row</option>
+
+                        </select>
+                    </div>
+                    <div class="clr-col-lg-3 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="Cash">Cash Code</label>
+                        <input type="text" id="Cash" placeholder="Cash">
+                    </div>
+                    <div class="clr-col-lg-3 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="department"></label><br>
+                        
+                        <select class="form-control" ngModel="department" id="Type"  (change)="getSections($event.target.selectedIndex)" >
+                            <option></option>
+                            <option *ngFor="let department of dept">{{department.department_name}}
+                            </option>
+                        </select>
+                       
+                    </div>
+                    
+                    <div class="clr-col-lg-3 clr-col-md-4 clr-col-sm-12 clr-col-xs-12">
+                        <label for="department"></label><br>
+                        
+                        <select class="form-control" ngModel="sections" id="Type">
+                            <option></option>
+                            <option  *ngFor="let section of sections">{{section.section_name}}
+                            </option>
+                          
+                        </select>
+                       
+                    </div>
+                </div>
+            </form>
+            
+            <button type="button" class="btn btn-primary" (click)="addList(test)">ADD</button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sno.</th>
+                            <th scope="col">Material Name</th>
+                            <th scope="col">Material Code</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Material Type</th>
+                            <th scope="col">Cash Code</th>
+                            
+        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of testListdata">
+                            <td>{{ item.sno }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.code }}</td>
+                            <td>{{ item.qty  }}</td>
+                            <td>{{ item.type }}</td>
+                            <td>{{ item.cash }}</td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!-- Footer Started -->
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary" (click)=save(test)>Save</button>
+        </div>
+    </div>
+  /////////////////////
+  //insert data for php//
+  
+  <?php
+$servername = 'localhost';
+$username = 'modern';
+$password = 'modern';
+$dbname = 'moodern';
+// Create a connection
+//$conn = mysqli_connect($servername, $username, $password,$dbname) or die("Unable to Connect to '$servername'");
+
+$conn = mysqli_connect('localhost', 'user', 'user', 'lawyer_db');
+
+if( isset($_POST['submit'])){
+
+  $gname = $_POST['gname'];
+  $tmember = $_POST['tmember'];
+ 
+ 
+  $result=mysqli_query($conn,"INSERT into `addgroup` values('','$gname','$tmember')");
+
+  if($result){
+    echo "<script>alert(' data inserted');</script>";
+
+   header("Location:group.php");
+}else{
+  echo "<script>alert(' data not inserted');</script>";
+  }
+
+  
+  
+}
+    
+?>
+  
+////select data php//
+  <tbody>
+                          <?php
+                          $conn = mysqli_connect("localhost", "user", "user", "lawyer_db");
+                          $records = mysqli_query($conn, "select * from addteams"); // fetch data from database
+
+                          while ($data = mysqli_fetch_array($records)) {
+
+                          ?>
+                            <tr data-key="4490">
+                              <td class="serial_column_td" data-th="#"></td>
+                              <td><?php echo $data['name']; ?><span class=""></span></td>
+                              <td><?php echo $data['lname']; ?></td>
+                              <td><?php echo $data['designation']; ?></td>
+                              <td><?php echo $data['email']; ?></td>
+                              <td><?php echo $data['mob_no']; ?></td>
+                         <td class="serial-row" style="margin-left: 40px;">  <a href="updatemyprofile.php" class="far fa-edit"></a>       <a class="far fa-trash-alt"></a></td>
+                           </tr>
+                          <?php
+                          }
+                          ?>
+                        </tbody>
+  
+  //email conectivity//
+  <?php
+	if(isset($_POST['submit'])){
+		$name=$_POST['name'];
+		$email=$_POST['email'];
+		$subject=$_POST['subject'];
+		$message=$_POST['message'];
+
+		$to='cktechmedia9@gmail.com'; // Receiver Email ID, Replace with your email ID
+		$subject='Form Submission';
+		$message="Name :".$name."\n"."Subject :".$subject."\n"."Wrote the following :"."\n\n".$message;
+		$headers="From: ".$email;
+
+		if(mail($to, $subject, $message, $headers)){
+			echo "<h1>Sent Successfully! Thank you"." ".$name.", We will contact you shortly!</h1>";
+			header("Location: contact.html");
+		}
+		else{
+			echo "Something went wrong!";
+		}
+	}
+?>
+  
